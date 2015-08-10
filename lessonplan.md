@@ -30,6 +30,7 @@ Categories of Software
 ----------------------
 
 We will cover two types of applications in this workshop:
+
 1. Scripts
 2. Compiled Binary
 
