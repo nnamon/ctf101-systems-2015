@@ -31,7 +31,7 @@ the basics of offensive systems and web security.
 
 This workshop does not follow any formal syllabus or framework published by any
 academic or commercial entity and is aimed at the beginner level. It is aimed to
-run for 10 hours over two days, with 5 hours given to Systems Security, and 5
+run for 8 hours over two days, with 4 hours given to Systems Security, and 4
 hours given to Web Security.
 
 
@@ -137,7 +137,23 @@ Introduction to the Pico Platform
 We will be using the PicoCTF Platform 2 as our scoreboard to keep track of
 everyone's progress in this workshop.
 
+Accessing the CTF101 Scoreboard
+-------------------------------
+
 *Insert instructions on how to access and complete the first sanity check*
+
+Flag Formats
+------------
+
+Flag formats are a very recent development within CTFs but they have grown to be
+a key and crucial part of a quality one. They prevent ambiguity when solving
+challenges.
+
+In CTF101, our flag format will be flag{SomeWordsHere}. Please note that there
+are exceptions to this rule in some CTFs. It will be explicitly indicated if
+there are deviations to how the flag is accepted. When entering the flag into
+the scoreboard always include the flag{} encapsulations.
+
 
 Example Challenge: Sanity Check
 -------------------------------
@@ -177,8 +193,8 @@ script that allows a user to ping an arbitrary ip address.
 
 #### Practical 1: Ping
 
-The details for the practical in this example may be found on the Pico CTF
-scoreboard.
+The details and the file for the practical in this example may be found on the
+Pico CTF scoreboard.
 
 ```python
 import sys
@@ -195,6 +211,12 @@ def main():
 if __name__ == "__main__":
     main()
 ```
+
+Before trying anything, download the file to your Linux system and attempt to
+understand what the program does. Modify the file with print statements to
+inspect the internal state of the program as it progresses in order to do so.
+Make sure you understand what the *subprocess.getoutput* command is doing by
+looking up the Python documentation before continuing.
 
 Exploitation of a program usually begins with processing untrusted user input
 without the proper handling. In this example, the user is prompted to supply an
@@ -224,10 +246,14 @@ injecting the following:
 google.com; cat flag
 ```
 
-### Classes of Vulnerabilities
+Classes of Vulnerabilities
+--------------------------
 
-One method of classifying a vulnerability is the extent of control it grants the
-attacker. We have five primary levels of control in increasing severity:
+Now that we have learnt that one has the option of analysing and auditing the
+source code for vulnerabilities, we may delve deeper into what vulnerabilities
+actually exist in the wild. One method of classifying a vulnerability is the
+extent of control it grants the attacker. We have five primary levels of control
+in increasing severity:
 
 1. Information Leak
 2. Denial of Service
@@ -286,7 +312,117 @@ privileged access results in granting these privileges to the attacker.
 #### Privilege Escalation
 
 Privilege escalation vulnerabilities can exist in multiple forms and are not
-necessarily arbitrary code execution bugs.
+necessarily arbitrary code execution bugs. These vulnerabilties, when exploited
+result in the attacker obtaining higher level rights such as the administrator's
+or root's.
+
+At a more advanced level, there exists vulnerabilities within the kernel of
+the operating system. These vulnerabilities usually allow an attacker with local
+access to the system to escalate their rights from a restricted user to root.
+
+
+Classes of Vulnerabilities: Demonstrated
+----------------------------------------
+
+Having briefly listed and described the classes of vulnerabilities that may be
+encountered in a system, we will further elaborate through practical examples.
+
+### Practical 2: Information Leak
+
+Please look at the problem on the scoreboard to download the source file and
+obtain the connection details for this problem. Now, take a look at the source:
+
+```python
+import sys
+
+FLAG = "XXXXXXXXXXXXXXXX"
+PUBLIC_DATA = "RainRainGoAwayComeAgainAnotherDay"
+
+
+def main():
+    haystack = FLAG + PUBLIC_DATA
+    write("Welcome to the Infoleak!\n")
+    write("Please enter an index: ")
+
+    index = len(FLAG) + int(sys.stdin.readline())
+    write("Giving you the data from index %d...\n" % index)
+    write("Here's the data: %s\n" % haystack[index:])
+
+
+def write(data):
+    sys.stdout.write(data)
+    sys.stdout.flush()
+
+
+if __name__ == "__main__":
+    main()
+```
+
+Now, in a CTF, a means of simulating application specific secrets in challenge
+applications involve the organisers including a variable for the flag in the
+source code, but ultimately redacting it in the copy distributed to the
+participants. The real copy with a real flag is hosted on the organiser's
+servers and exploitation of the remote program will yield the correct flag.
+
+The goal of a hacker is to manipulate the program into doing something the
+programmer did not intend the program to do. In this example, it is obvious the
+programmer intended for the user to supply positive integers to display the
+public data.
+
+Let's try to play with it fairly first:
+
+```
+$ python infoleak.py
+Welcome to the Infoleak!
+Please enter an index: 0
+Giving you the data from index 16...
+Here's the data: RainRainGoAwayComeAgainAnotherDay
+```
+
+Now, certain things in the output should raise some red flags here. Notice how
+when entering a zero index, we are given data from index 16. Now, looking back
+at the source code, we can observe that the data comes from the 'haystack'
+variable. This variable is a concatenation of the 'FLAG' and 'PUBLIC\_DATA' and
+our supplied index is added to the length of 'FLAG' which means any 'legitimate'
+value that we type will result in the calculated index landing within the 'safe'
+public data.
+
+You may not have recognised it, but our first infoleak vulnerability is here.
+When supplying an index of zero, we can obtain the length of the flag. We'll use
+this information later. Let's try to make the program behave in a non-intended
+manner right now. Notice that the program is using int() to convert a string
+into an integer. Most programming languages support inputs such as "1", "999",
+and with some parameters, "4e3bc" but remember, negative integers are integers
+too and are properly handled by these parsers. Let's see if it works:
+
+```
+$ python infoleak.py
+Welcome to the Infoleak!
+Please enter an index: -1
+Giving you the data from index 15...
+Here's the data: XRainRainGoAwayComeAgainAnotherDay
+```
+
+And it does! Supplying a negative integer will allow us to read data from the
+non-public segment of the 'haystack'. It's just a matter of applying the
+information of the flag length we obtained just now to get the entire flag.
+
+```
+python infoleak.py
+Welcome to the Infoleak!
+Please enter an index: -16
+Giving you the data from index 0...
+Here's the data: XXXXXXXXXXXXXXXXRainRainGoAwayComeAgainAnotherDay
+```
+
+
+### Practical 3: Denial of Service
+
+### Practical 4: Arbitrary File Write
+
+### Practical 5: Arbitrary Code Execution
+
+### Practical 6: Privilege Escalation
 
 Representation of Programs as Data
 ==================================
