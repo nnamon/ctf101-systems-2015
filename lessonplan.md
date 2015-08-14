@@ -12,13 +12,18 @@ Topics to Cover
 
 * Agenda
 * Introduction to NUS Greyhats
+    * /usr/bin/whoami
 * Introduction to CTFs
+    * What is a CTF?
+    * Styles of CTFs
+    * CTF 101
 * Introduction to the Pico Platform
+    * Accessing the CTF101 Scoreboard
 * Introduction to Software Exploitation
     * Scripting Languages
         * Source code auditing
         * Classes of Vulnerabilities
-    * Contrast with ELF and EXEs
+    * Contrast between Scripts and Binaries
 * Representation of Code as Data
 * x86-64 Primer
 
@@ -140,7 +145,20 @@ everyone's progress in this workshop.
 Accessing the CTF101 Scoreboard
 -------------------------------
 
-*Insert instructions on how to access and complete the first sanity check*
+To access the CTF101 Scoreboard, please visit ctf.nusgreyhats.org in your
+browser and sign up for an account.
+
+I highly recommending signing up individually instead of in teams.
+
+CTF101 Infrastructure
+---------------------
+
+There are two domains involved in this lecture:
+
+1. ctf.nusgreyhats.org
+2. play.nusgreyhats.org
+
+Please don't attack any other systems.
 
 Flag Formats
 ------------
@@ -154,11 +172,29 @@ are exceptions to this rule in some CTFs. It will be explicitly indicated if
 there are deviations to how the flag is accepted. When entering the flag into
 the scoreboard always include the flag{} encapsulations.
 
+Necessary Tools
+---------------
+
+Before we begin, I'd like to do a quick check to see if everyone has the
+required tools installed.
+
+At the minimum, you should have a Linux virtual machine with the following to
+complete the practicals:
+
+1. python3
+2. netcat
+3. ssh
+
 
 Example Challenge: Sanity Check
 -------------------------------
 
+Now, just to get everyone started with some points, and to familiarise everyone
+with how flag submissions work with the scoreboard, we include a sanity check
+challenge. Sanity check challenges are also useful in telling teams who sign up
+for fun against teams who actually solve challenges in CTFs.
 
+To complete this challenge, simply download the file and submit the flag.
 
 
 Introduction to Software Exploitation
@@ -172,9 +208,12 @@ We will cover two types of applications in this workshop:
 1. Scripts
 2. Compiled Binaries
 
-While the majority of the workshop will cover Compiled Binary exploitation, we
-will briefly introduce what scripting languages are, their use in modern
+We will briefly introduce what scripting languages are, their use in modern
 systems, and the common insecure coding problems introduced by programmers.
+
+On compiled binaries, we will be skimming the very surface as a teaser to
+further workshops in the area of software exploitation through memory corruption
+bugs.
 
 Scripting Languages
 -------------------
@@ -662,14 +701,23 @@ if __name__ == "__main__":
 
 This is a pretty long one so we'll identify things step by step.
 
+
+
 ### Practical 5: Arbitrary Code Execution
 
 Itching to pop a shell yet? In this practical example, you'll finally get to.
 
 
+
+
 ### Practial 6: Privilege Escalation
 
 Now let's try something different. SSH into the server.
+
+
+Contrast between Scripts and Binaries
+-------------------------------------
+
 
 Representation of Programs as Data
 ==================================
