@@ -1,10 +1,10 @@
 {
-    "name": "Sanity Check",
-    "score": 5,
-    "category": "Sanity",
-    "grader": "sanity/sanity/grader.py",
-    "description": "Please submit the flag found <a target=_blank href='/problem-static/sanity/sanity/sanity.txt'>here</a>.",
+    "name": "Ping",
+    "score": 2,
+    "category": "Vuln Classes",
+    "grader": "vulnclasses/ping/grader.py",
+    "description": "Exploit <a target=_blank href='/problem-static/sanity/sanity/sanity.txt'>this</a> running at xxxx.",
     "threshold": 0,
     "weightmap": {},
-    "hint": "You are insane."
+    "hint": "How can you inject a command?"
 }

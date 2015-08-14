@@ -1,10 +1,10 @@
 {
-    "name": "Sanity Check",
+    "name": "Arbitrary File Write",
     "score": 5,
-    "category": "Sanity",
-    "grader": "sanity/sanity/grader.py",
-    "description": "Please submit the flag found <a target=_blank href='/problem-static/sanity/sanity/sanity.txt'>here</a>.",
+    "category": "Vuln Classes",
+    "grader": "vulnclasses/filewrite/grader.py",
+    "description": "This <a target=_blank href='/problem-static/vulnclasses/filewrite/filewrite.py'>script</a> is vulnerable to arbitrary file writes. It is also running at xxxx.",
     "threshold": 0,
     "weightmap": {},
-    "hint": "You are insane."
+    "hint": "How would you get any content written to any file?"
 }

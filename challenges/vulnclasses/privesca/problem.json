@@ -1,10 +1,10 @@
 {
-    "name": "Sanity Check",
-    "score": 5,
-    "category": "Sanity",
-    "grader": "sanity/sanity/grader.py",
-    "description": "Please submit the flag found <a target=_blank href='/problem-static/sanity/sanity/sanity.txt'>here</a>.",
+    "name": "Privilege Escalation",
+    "score": 7,
+    "category": "Vuln Classes",
+    "grader": "vulnclasses/privesca/grader.py",
+    "description": "Get more privileged access - ssh at xxx",
     "threshold": 0,
     "weightmap": {},
-    "hint": "You are insane."
+    "hint": "Is the password check secure?"
 }

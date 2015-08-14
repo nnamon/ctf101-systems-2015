@@ -1,10 +1,10 @@
 {
-    "name": "Sanity Check",
-    "score": 5,
-    "category": "Sanity",
-    "grader": "sanity/sanity/grader.py",
-    "description": "Please submit the flag found <a target=_blank href='/problem-static/sanity/sanity/sanity.txt'>here</a>.",
+    "name": "Information Leak",
+    "score": 3,
+    "category": "Vuln Classes",
+    "grader": "vulnclasses/infoleak/grader.py",
+    "description": "<a target=_blank href='/problem-static/vulnclasses/infoleak/infoleak.py'>This</a> is running at xxxx.",
     "threshold": 0,
     "weightmap": {},
-    "hint": "You are insane."
+    "hint": "Maybe you should look up Heartbleed."
 }
