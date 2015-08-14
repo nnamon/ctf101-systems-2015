@@ -3,7 +3,7 @@
     "score": 7,
     "category": "Vuln Classes",
     "grader": "vulnclasses/privesca/grader.py",
-    "description": "Get more privileged access - ssh at xxx",
+    "description": "Get more privileged access - ssh at escalate@play.nusgreyhats.org. Password: ctf.",
     "threshold": 0,
     "weightmap": {},
     "hint": "Is the password check secure?"

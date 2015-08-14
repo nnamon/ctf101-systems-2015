@@ -3,7 +3,7 @@
     "score": 5,
     "category": "Vuln Classes",
     "grader": "vulnclasses/filewrite/grader.py",
-    "description": "This <a target=_blank href='/problem-static/vulnclasses/filewrite/filewrite.py'>script</a> is vulnerable to arbitrary file writes. It is also running at xxxx.",
+    "description": "This <a target=_blank href='/problem-static/vulnclasses/filewrite/filewrite.py'>script</a> is vulnerable to arbitrary file writes. It is also running at play.nusgreyhats.org:1339.",
     "threshold": 0,
     "weightmap": {},
     "hint": "How would you get any content written to any file?"

@@ -3,7 +3,7 @@
     "score": 2,
     "category": "Vuln Classes",
     "grader": "vulnclasses/ping/grader.py",
-    "description": "Exploit <a target=_blank href='/problem-static/sanity/sanity/sanity.txt'>this</a> running at xxxx.",
+    "description": "Exploit <a target=_blank href='/problem-static/vulnclasses/ping/ping.py'>this</a> running at play.nusgreyhats.org:1337.",
     "threshold": 0,
     "weightmap": {},
     "hint": "How can you inject a command?"

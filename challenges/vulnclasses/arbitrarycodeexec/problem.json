@@ -3,7 +3,7 @@
     "score": 6,
     "category": "Vuln Classes",
     "grader": "vulnclasses/arbitrarycodeexec/grader.py",
-    "description": "This simple <a target=_blank href='/problem-static/vulnclasses/arbitrarycodeexec/codeexec.py'>calculator</a> is running at xxxx.",
+    "description": "This simple <a target=_blank href='/problem-static/vulnclasses/arbitrarycodeexec/codeexec.py'>calculator</a> is running at play.nusgreyhats.org:1340.",
     "threshold": 0,
     "weightmap": {},
     "hint": "Can we get a shell?"
