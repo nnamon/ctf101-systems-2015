@@ -1,3 +1,5 @@
+#!/usr/bin/python
+
 import sys
 
 FLAG = "flag{y0u_l34k3d_m3!}"
