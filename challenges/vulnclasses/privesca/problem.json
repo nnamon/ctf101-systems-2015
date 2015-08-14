@@ -1,0 +1,10 @@
+{
+    "name": "Sanity Check",
+    "score": 5,
+    "category": "Sanity",
+    "grader": "sanity/sanity/grader.py",
+    "description": "Please submit the flag found <a target=_blank href='/problem-static/sanity/sanity/sanity.txt'>here</a>.",
+    "threshold": 0,
+    "weightmap": {},
+    "hint": "You are insane."
+}

@@ -312,9 +312,9 @@ privileged access results in granting these privileges to the attacker.
 #### Privilege Escalation
 
 Privilege escalation vulnerabilities can exist in multiple forms and are not
-necessarily arbitrary code execution bugs. These vulnerabilties, when exploited
-result in the attacker obtaining higher level rights such as the administrator's
-or root's.
+necessarily arbitrary code execution bugs. They often are though. These
+vulnerabilties, when exploited result in the attacker obtaining higher level
+rights such as the administrator's or root's.
 
 At a more advanced level, there exists vulnerabilities within the kernel of
 the operating system. These vulnerabilities usually allow an attacker with local
@@ -537,7 +537,10 @@ And we are done. Here is your flag: flag{crash}.
 ### Practical 4: Arbitrary File Write
 
 Let's take a look at a more involved example this time. Download the source code
-package on the scoreboard and unpack it in a working directory.
+ on the scoreboard. Take five minutes to try out the code locally. Understand
+ what the program requires in terms of directory structure and files. Discern
+ what the behaviour of the program is and try to identify the inherent
+ vulnerabilities.
 
 ```python
 #! /usr/bin/python
@@ -600,6 +603,9 @@ def main():
 
 
 def retrieve_secret(secretname):
+    if "flag" in secretname:
+        write("Privileged secret requires admin writes\n")
+        return
     try:
         with open("secrets/%s" % (secretname)) as secretfile:
             write("Here's your secret: %s\n" % secretfile.read())
@@ -654,10 +660,18 @@ if __name__ == "__main__":
     main()
 ```
 
+This is a pretty long one so we'll identify things step by step.
 
 ### Practical 5: Arbitrary Code Execution
 
-### Practical 6: Privilege Escalation
+Itching to pop a shell yet? In this practical example, you'll finally get to.
+
+
+### Practial 6: Privilege Escalation
+
+Now let's try something different. SSH into the server.
 
 Representation of Programs as Data
 ==================================
+
+

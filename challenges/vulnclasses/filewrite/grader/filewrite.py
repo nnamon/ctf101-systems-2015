@@ -58,6 +58,9 @@ def main():
 
 
 def retrieve_secret(secretname):
+    if "flag" in secretname:
+        write("Privileged secret requires admin writes\n")
+        return
     try:
         with open("secrets/%s" % (secretname)) as secretfile:
             write("Here's your secret: %s\n" % secretfile.read())
