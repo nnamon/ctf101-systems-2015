@@ -418,7 +418,242 @@ Here's the data: XXXXXXXXXXXXXXXXRainRainGoAwayComeAgainAnotherDay
 
 ### Practical 3: Denial of Service
 
+Demonstrating a denial of service is tricky for a large group. So instead of
+having a problem that's hosted on my servers, we shall demonstrate this
+vulnerability by running a Python server on your own machines.
+
+Download the source file from the scoreboard or copy it from here. It should
+look exactly like this:
+
+```python
+service.py
+import socket
+import sys
+
+HOST = ''
+PORT = 8888
+
+
+def main():
+    s = socket.socket()
+    try:
+        s.bind((HOST, PORT))
+    except:
+        print("Error")
+        sys.exit()
+
+    s.listen(10)
+
+    while True:
+        conn, addr = s.accept()
+        logic(conn)
+
+
+def logic(conn):
+    conn.sendall(b"Hello, what is your age? Enter here: ")
+    age = int(conn.recv(50).strip())
+    print("Person is age %d" % age)
+    conn.sendall(b"Thank you. You are old.")
+    conn.close()
+
+
+if __name__ == "__main__":
+    main()
+```
+
+To run this simply do the following in your terminal:
+
+```
+$ python denialofservice.py
+
+```
+
+Now, to connect to the simple listening server, we can use netcat. The default
+port is 8888 so in a separate terminal, we do this:
+
+```
+$ nc localhost 8888
+Hello, what is your age? Enter here: 10
+Thank you. You are old
+```
+
+This server accepts multiple connections. Try the netcat command a couple of
+times to make sure. Now, the objective of this example is to deny other users
+access to the server so it should be suffice to crash the server to prevent
+others from accessing the server.
+
+Sidenote: We can check whether the server is actually accepting connections by
+making netcat verbose.
+
+```
+$ nc -v localhost 8888
+localhost [127.0.0.1] 8888 (ddi-tcp-1) open
+Hello, what is your age? Enter here: 1
+Thank you. You are old.
+$ nc -v localhost 8888
+localhost [127.0.0.1] 8888 (ddi-tcp-1) open
+Hello, what is your age? Enter here: 1
+Thank you. You are old.
+```
+
+Now, we want to stop the server forcefully to prevent others from accessing the
+server. We may do this by forcing the server to raise an exception. Review the
+source and figure out why the following input causes a crash.
+
+```
+$ nc -v localhost 8888
+localhost [127.0.0.1] 8888 (ddi-tcp-1) open
+Hello, what is your age? Enter here: crash
+```
+
+Looking at the terminal where you ran the listening server you get:
+
+```
+$ python denialofservice.py
+Person is age 10
+Person is age 1
+Person is age 1
+Person is age 1
+Traceback (most recent call last):
+  File "denialofservice.py", line 32, in <module>
+    main()
+  File "denialofservice.py", line 20, in main
+    logic(conn)
+  File "denialofservice.py", line 25, in logic
+    age = int(conn.recv(50).strip())
+ValueError: invalid literal for int() with base 10: b'crash'
+```
+
+Verify that others are unable to access the server:
+
+```
+$ nc -v localhost 8888
+localhost [127.0.0.1] 8888 (ddi-tcp-1): Connection refused
+```
+
+And we are done. Here is your flag: flag{crash}.
+
+
 ### Practical 4: Arbitrary File Write
+
+Let's take a look at a more involved example this time. Download the source code
+package on the scoreboard and unpack it in a working directory.
+
+```python
+#! /usr/bin/python
+
+import sys
+
+
+logged_in = False
+admin = False
+FLAG = open("flag").read()
+
+
+def main():
+    write("Secret Storage 1.0\n")
+    while True:
+        if not logged_in:
+            write("You are not logged in. Please choose one option: \n")
+            write("1. Log in\n")
+            write("2. Create Account\n")
+
+            choice = sys.stdin.readline().strip()
+
+            write("Please enter your name: ")
+            name = sys.stdin.readline().strip()
+            write("Please enter your password: ")
+            password = sys.stdin.readline().strip()
+
+            if choice == "1":
+                if validate(name, password):
+                    write("Success!\n")
+                else:
+                    write("Failure!\n")
+            elif choice == "2":
+                create_user(name, password)
+            else:
+                write("Invalid choice.\n")
+
+        else:
+            write("Welcome %s!\n" % logged_in)
+            write("1. Retrieve secret\n")
+            write("2. Store secret\n")
+            write("3. Read admin secret\n")
+
+            choice = sys.stdin.readline().strip()
+
+            if choice == "1":
+                write("Which secret would you like to retrieve: ")
+                secretname = sys.stdin.readline().strip()
+                retrieve_secret(secretname)
+            elif choice == "2":
+                write("What is the name of the secret you want to store: ")
+                secretname = sys.stdin.readline().strip()
+                write("What secret would you like to store: ")
+                secret = sys.stdin.readline().strip()
+                store_secret(secretname, secret)
+            elif choice == "3":
+                reveal_secret()
+            else:
+                write("Invalid choice.\n")
+
+
+def retrieve_secret(secretname):
+    try:
+        with open("secrets/%s" % (secretname)) as secretfile:
+            write("Here's your secret: %s\n" % secretfile.read())
+    except:
+        write("No such secret\n")
+
+
+def store_secret(secretname, secret):
+    try:
+        with open("secrets/%s" % (secretname), "w") as secretfile:
+            secretfile.write(secret)
+            write("Secret written!\n")
+    except:
+        write("Error in writing secret.\n")
+
+
+def reveal_secret():
+    if admin:
+        write("Here is the admin's secret: %s\n" % FLAG)
+    else:
+        write("You are not admin.\n")
+
+
+def validate(name, password):
+    try:
+        with open("accounts/" + name) as accountfile:
+            adminflag, filepassword = accountfile.read().split(":")
+            if password == filepassword:
+                global logged_in
+                logged_in = name
+                if adminflag == "1":
+                    global admin
+                    admin = True
+                return True
+    except:
+        write("No such account.\n")
+    return False
+
+
+def create_user(name, password):
+    with open("accounts/" + name, "w") as accountfile:
+        accountfile.write("0:" + password)
+    write("Account created. Please log in.\n")
+
+
+def write(data):
+    sys.stdout.write(data)
+    sys.stdout.flush()
+
+
+if __name__ == "__main__":
+    main()
+```
+
 
 ### Practical 5: Arbitrary Code Execution
 
