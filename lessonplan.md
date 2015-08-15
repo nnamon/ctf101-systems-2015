@@ -28,8 +28,7 @@ Topics to Cover
         * Classes of Vulnerabilities
         * Demonstration: Classes of Vulnerabilities
     * Contrast between Scripts and Binaries
-* Representation of Code as Data
-* Memory Corruption Teaser
+* Conclusion
 
 Workshop Agenda
 ===============
@@ -767,7 +766,7 @@ This is very typical of a local exploit challenge (as opposed to the mostly
 remote ones we have been doing). Notice the setgid bit is set for the executable
 binary escalate. This means that the binary will be run with the privileges of
 that group. Now, let's get more information about the binary by looking at the
-source code.
+source code. This is our first binary practical :)
 
 ```c
 #include <stdio.h>
@@ -817,9 +816,14 @@ $
 Contrast between Scripts and Binaries
 -------------------------------------
 
+Now, having experienced both scripts and binaries in the practicals, what are
+the immediate differences that are apparent?
 
-Representation of Programs as Data
-==================================
+To be discussed during the workshop.
 
-Memory Corruption Teaser
-========================
+Conclusion
+==========
+
+That is it for a high level overview of offensive Systems Security but we'll
+have a few teasers following this for those who want to get into the more
+advanced topics of binary exploitation.
