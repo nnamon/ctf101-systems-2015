@@ -148,8 +148,9 @@ everyone's progress in this workshop.
 Accessing the CTF101 Scoreboard
 -------------------------------
 
-To access the CTF101 Scoreboard, please visit ctf.nusgreyhats.org in your
-browser and sign up for an account.
+To access the CTF101 Scoreboard, please visit (the server has been shut off,
+please see [this](instructions.md) for instructions on how to host the
+challenges on your own machine) in your browser and sign up for an account.
 
 I highly recommending signing up individually instead of in teams.
 
@@ -158,8 +159,8 @@ CTF101 Infrastructure
 
 There are two domains involved in this lecture:
 
-1. ctf.nusgreyhats.org
-2. play.nusgreyhats.org
+1. (server is down)
+2. (server is down)
 
 Please don't attack any other systems.
 
